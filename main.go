@@ -4,6 +4,7 @@ import (
 	"go-gin-repository/controllers"
 	"go-gin-repository/database"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -22,8 +23,11 @@ func main() {
 	s.Use(gin.Recovery())
 
 	// db connection
-	database.ConnectMongoDB()
-	database.ConnectMysqlDB()
+	if os.Getenv("DB_CONNECTION") == "mongodb" {
+		database.ConnectMongoDB()
+	} else {
+		database.ConnectMysqlDB()
+	}
 
 	// routes
 	s.GET("/", func(c *gin.Context) {
